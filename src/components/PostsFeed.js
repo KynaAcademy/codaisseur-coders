@@ -1,31 +1,32 @@
 // src/components/PostsFeed.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import moment from "moment";
+
+import { startLoading, postsFetched } from "../store/feed/actions";
+import { selectFeedLoading, selectFeedPosts } from "../store/feed/selectors";
 
 import "./PostsFeed.css";
 
 const API_URL = `https://codaisseur-coders-network.herokuapp.com`;
 
 export default function PostsFeed() {
-  const [data, setData] = useState({
-    loading: false,
-    posts: []
-  });
+  const dispatch = useDispatch();
+
+  const loading = useSelector(selectFeedLoading);
+  const posts = useSelector(selectFeedPosts);
 
   async function fetchNext5Posts() {
-    setData({ ...data, loading: true });
+    dispatch(startLoading());
 
     const res = await axios.get(
-      `${API_URL}/posts?offset=${data.posts.length}&limit=5`
+      `${API_URL}/posts?offset=${posts.length}&limit=5`
     );
 
     const morePosts = res.data.rows;
 
-    setData({
-      loading: false,
-      posts: [...data.posts, ...morePosts]
-    });
+    dispatch(postsFetched(morePosts));
   }
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export default function PostsFeed() {
   return (
     <div className="PostsFeed">
       <h2>Recent posts</h2>
-      {data.posts.map(post => {
+      {posts.map(post => {
         return (
           <div key={post.id}>
             <h3>{post.title}</h3>
@@ -56,7 +57,7 @@ export default function PostsFeed() {
         );
       })}
       <p>
-        {data.loading ? (
+        {loading ? (
           <em>Loading...</em>
         ) : (
           <button onClick={fetchNext5Posts}>Load more</button>
