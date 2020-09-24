@@ -3,14 +3,19 @@ const initialState = {
   accessToken: null, //jwt -> token
 };
 
-export default function authReducer(state = initialState, action) {
-  switch (action.type) {
-    case "SAVE_USER_DATA":
-      const { token, userProfile: me } = action.payload;
+export default function authReducer(state = initialState, { type, payload }) {
+  switch (type) {
+    case "LOGIN_SUCCESSFUL": {
       return {
-        accessToken: token,
-        me,
+        accessToken: payload.token,
+        me: payload.profile,
       };
+    }
+    case "LOGOUT": {
+      localStorage.removeItem("myToken"); //remove token from localStorage;
+
+      return initialState;
+    }
     default:
       return state;
   }

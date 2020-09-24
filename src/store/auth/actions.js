@@ -1,9 +1,60 @@
 import axios from "axios";
+const API_URL = `https://codaisseur-coders-network.herokuapp.com`;
 
-const saveUserData = (token, userProfile) => {
+const userLoggedIn = (token, profile) => {
   return {
-    type: "SAVE_USER_DATA",
-    payload: { token, userProfile },
+    type: "LOGIN_SUCCESSFUL",
+    payload: {
+      token,
+      profile,
+    },
+  };
+};
+
+export const logout = () => {
+  return {
+    type: "LOGOUT",
+  };
+};
+
+export const login = (email, password) => {
+  return async (dispatch, getState) => {
+    try {
+      const loginResponse = await axios.post(`${API_URL}/login`, {
+        email,
+        password,
+      });
+      // console.log(loginResponse);
+      const token = loginResponse.data.jwt;
+      localStorage.setItem("myToken", token); //save token to local storage
+      dispatch(getUserProfile(token));
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const bootstrapLoginState = () => {
+  return (dispatch, getState) => {
+    // check if there is something in local storage
+    const myToken = localStorage.getItem("myToken");
+    console.log("saved token?", myToken);
+    // if there is, call /me
+    if (myToken) {
+      dispatch(getUserProfile(myToken));
+    }
+  };
+};
+
+export const getUserProfile = token => {
+  return async (dispatch, getState) => {
+    const userProfileResponse = await axios.get(`${API_URL}/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const userProfile = userProfileResponse.data;
+    dispatch(userLoggedIn(token, userProfile));
   };
 };
 
