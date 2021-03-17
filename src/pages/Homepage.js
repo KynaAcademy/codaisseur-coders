@@ -1,5 +1,5 @@
 // src/pages/Homepage.js
-import React from "react";
+import React, { useState } from "react";
 import PostsFeed from "../components/PostsFeed";
 
 export default function Homepage() {

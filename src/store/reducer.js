@@ -5,7 +5,7 @@ import postPageSliceReducer from "./postPage/reducer";
 
 const reducer = combineReducers({
   feed: feedSliceReducer,
-  postPage: postPageSliceReducer
+  //postPage: postPageSliceReducer
   // etc.
 });
 

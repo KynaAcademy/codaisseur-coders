@@ -13,6 +13,12 @@ export default function feedSliceReducer(state = initialState, action) {
         loading: true,
       };
     }
+    case "feed/postsFetched": {
+      return {
+        loading: false,
+        posts: [...state.posts, ...action.payload],
+      };
+    }
     default: {
       return state;
     }
