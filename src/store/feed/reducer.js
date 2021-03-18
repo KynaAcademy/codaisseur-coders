@@ -2,7 +2,7 @@
 
 const initialState = {
   loading: false,
-  posts: []
+  posts: [],
 };
 
 export default function feedSliceReducer(state = initialState, action) {
@@ -10,13 +10,20 @@ export default function feedSliceReducer(state = initialState, action) {
     case "feed/startLoading": {
       return {
         ...state,
-        loading: true
+        loading: true,
       };
     }
     case "feed/postsFetched": {
       return {
         loading: false,
-        posts: [...state.posts, ...action.payload]
+        posts: [...state.posts, ...action.payload],
+      };
+    }
+    case "feed/addOne": {
+      const newPost = action.payload;
+      return {
+        ...state,
+        posts: [newPost, ...state.posts],
       };
     }
     default: {
