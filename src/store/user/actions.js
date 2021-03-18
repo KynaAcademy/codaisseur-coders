@@ -7,6 +7,11 @@ const setLoading = () => ({ type: "user/loading" });
 
 const setToken = jwt => ({ type: "user/setToken", payload: jwt });
 
+const loginSuccess = (userData, token) => ({
+  type: "user/loginSuccess",
+  payload: { userData, token },
+});
+
 export const signUp = (name, email, password, history) => async (
   dispatch,
   getState
@@ -21,10 +26,34 @@ export const signUp = (name, email, password, history) => async (
       password,
     });
 
-    console.log(response.data.jwt);
-    dispatch(setToken(response.data.jwt));
+    console.log("sign up success!");
 
-    history.push("/"); // send them to homepage
+    history.push("/login"); // send them to homepage
+  } catch (e) {
+    console.log(e.message);
+  }
+};
+
+export const login = (email, password) => async (dispatch, getState) => {
+  try {
+    dispatch(setLoading());
+
+    const response = await axios.post("/login", { email, password });
+
+    const token = response.data.jwt;
+
+    console.log("Login success!");
+
+    const userProfileResponse = await axios.get("/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const userData = userProfileResponse.data;
+
+    // dispatch(setToken(token));
+    dispatch(loginSuccess(userData, token));
   } catch (e) {
     console.log(e.message);
   }

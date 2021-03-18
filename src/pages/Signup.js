@@ -24,6 +24,7 @@ const SignUpPage = () => {
 
   return (
     <div>
+      <h2>Sign up</h2>
       <form onSubmit={onFormSubmit}>
         <div>
           <label style={{ marginRight: 15 }}>Name</label>
