@@ -1,23 +1,21 @@
 // src/store/feed/reducer.js
 
 const initialState = {
-  loading: false,
-  posts: []
+  loading: true,
+  posts: [],
 };
 
-export default function feedSliceReducer(state = initialState, action) {
+export default function feedPageSliceReducer(state = initialState, action) {
   switch (action.type) {
-    case "feed/startLoading": {
+    case "POSTS_FETCHED": {
       return {
         ...state,
-        loading: true
+        posts: [...state.posts, ...action.payload],
+        loading: false,
       };
     }
-    case "feed/postsFetched": {
-      return {
-        loading: false,
-        posts: [...state.posts, ...action.payload]
-      };
+    case "START_LOADING": {
+      return { ...state, loading: true };
     }
     default: {
       return state;
