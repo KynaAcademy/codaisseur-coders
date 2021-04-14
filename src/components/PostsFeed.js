@@ -4,13 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import moment from "moment";
 
-import { selectFeedLoading } from "../store/feed/selectors";
-
 import "./PostsFeed.css";
 
 export default function PostsFeed() {
   const dispatch = useDispatch();
-  const loading = useSelector(selectFeedLoading);
 
   useEffect(() => {}, [dispatch]);
 
@@ -19,7 +16,7 @@ export default function PostsFeed() {
       <h2>Recent posts</h2>
 
       <p>
-        {loading ? (
+        {true ? (
           <em>Loading...</em>
         ) : (
           <button onClick={() => console.log("more")}>Load more</button>
