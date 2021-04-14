@@ -1,27 +1,45 @@
 // src/components/PostsFeed.js
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import moment from "moment";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+
+import { isFeedLoading, getFeedPosts } from "../store/feed/selectors";
+import { saveFeedPosts, fetchPostsThunk } from "../store/feed/actions";
 
 import "./PostsFeed.css";
 
+const API_URL = `https://codaisseur-coders-network.herokuapp.com`;
+
 export default function PostsFeed() {
+  const reduxPosts = useSelector(getFeedPosts);
+  const loading = useSelector(isFeedLoading);
+
   const dispatch = useDispatch();
 
-  useEffect(() => {}, [dispatch]);
+  useEffect(() => {
+    // here do some fetching
+    dispatch(fetchPostsThunk);
+  }, []);
 
   return (
     <div className='PostsFeed'>
       <h2>Recent posts</h2>
 
-      <p>
-        {true ? (
+      <div>
+        {loading ? (
           <em>Loading...</em>
         ) : (
-          <button onClick={() => console.log("more")}>Load more</button>
+          <>
+            {reduxPosts.map(p => (
+              <div key={p.id}>
+                <h3>{p.title}</h3>
+                <p>{p.content}</p>
+              </div>
+            ))}
+            <button onClick={() => dispatch(fetchPostsThunk)}>Load more</button>
+          </>
         )}
-      </p>
+      </div>
     </div>
   );
 }
