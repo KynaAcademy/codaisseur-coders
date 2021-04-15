@@ -1,7 +1,3 @@
-export function selectFeedLoading(reduxState) {
-  return reduxState.feed.loading;
-}
+export const isFeedLoading = reduxState => reduxState.feed.loading;
 
-export function selectFeedPosts(reduxState) {
-  return reduxState.feed.posts;
-}
+export const getFeedPosts = reduxState => reduxState.feed.posts;
