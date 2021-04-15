@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { findRenderedComponentWithType } from "react-dom/test-utils";
 import { useDispatch, useSelector } from "react-redux";
 
 import { signup } from "../store/user/actions";

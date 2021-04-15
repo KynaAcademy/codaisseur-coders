@@ -2,9 +2,8 @@
 
 const initialState = {
   token: null,
-  name: null,
-  email: null,
   loading: false,
+  profile: null,
 };
 
 export default function userReducer(state = initialState, action) {
@@ -12,11 +11,21 @@ export default function userReducer(state = initialState, action) {
     case "user/LOADING": {
       return { ...state, loading: true };
     }
+    case "user/LOGOUT": {
+      return initialState;
+    }
     case "user/STORE_TOKEN": {
       return {
         ...state,
         token: action.payload,
         loading: false,
+      };
+    }
+    case "user/STORE_PROFILE": {
+      return {
+        ...state,
+        profile: action.payload.profile,
+        token: action.payload.token,
       };
     }
     default: {
